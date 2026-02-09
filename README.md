@@ -39,11 +39,11 @@ Your agent reads a compact snapshot instead of the full DOM. It clicks `@e5` to 
 
 Real-world token reduction measured on live pages (February 2026):
 
-| Site | Raw HTML | Snapshot | Reduction |
-|------|----------|----------|-----------|
-| **Hacker News** | ~8,600 tokens | ~4,500 tokens | **47%** |
-| **Wikipedia** (Ruby article) | ~140,000 tokens | ~31,000 tokens | **78%** |
-| **GitHub** (repo page) | ~265,000 tokens | ~22,000 tokens | **92%** |
+| Site                         | Raw HTML        | Snapshot       | Reduction |
+| ---------------------------- | --------------- | -------------- | --------- |
+| **Hacker News**              | ~8,600 tokens   | ~4,500 tokens  | **47%**   |
+| **Wikipedia** (Ruby article) | ~140,000 tokens | ~31,000 tokens | **78%**   |
+| **GitHub** (repo page)       | ~265,000 tokens | ~22,000 tokens | **92%**   |
 
 The heavier the page (scripts, styles, data attributes, hidden elements), the bigger the savings. Simple content-focused pages like HN see ~50% reduction. Rich web apps like GitHub or StackOverflow see 90%+.
 
@@ -58,6 +58,7 @@ The heavier the page (scripts, styles, data attributes, hidden elements), the bi
 - **Smart waiting** -- Poll for CSS/XPath/text/block conditions with configurable timeout and interval
 - **Auto-retry** -- Node actions retry automatically on transient errors (element moving, coordinates not found)
 - **AI-friendly errors** -- Error messages tell the agent what to do next ("Call browser.snapshot to refresh refs")
+- **Standalone CLI** -- `agent_ferrum start/snapshot/click/stop` — each command is a separate invocation, ideal for AI agents chaining shell commands. Zero external dependencies
 
 ## Installation
 
@@ -104,7 +105,7 @@ browser.fill("@e2", "search query")
 # Or use CSS/XPath selectors
 browser.click("button.submit")
 browser.click("//a[@href='/about']")
-browser.fill(css: "input[name='email']", "user@example.com")
+browser.fill({css: "input[name='email']"}, "user@example.com")
 ```
 
 ### 3. Wait for content
@@ -153,6 +154,7 @@ AgentFerrum.configure do |c|
   c.browser_path = nil       # Custom Chrome/Chromium path
   c.user_agent = nil         # Custom user agent
   c.locale = nil             # Browser locale (e.g., "fr-FR")
+  c.timezone = nil           # Timezone override (e.g., "Europe/Paris")
 end
 ```
 
@@ -306,6 +308,84 @@ browser.click("@e7")  # Product link
 
 # Continue the loop...
 browser.quit
+```
+
+## CLI
+
+AgentFerrum ships with a standalone CLI where each command is a separate invocation. A background daemon holds the browser process, communicating over a Unix domain socket. Zero external dependencies -- only Ruby stdlib (`UNIXSocket`, `JSON`).
+
+```
+CLI invocation                     Daemon (background)
+┌──────────────┐                  ┌───────────────────┐
+│ agent_ferrum │  Unix socket     │ AgentFerrum::     │
+│ snapshot     │ ──────────────>  │ Browser instance  │
+│              │ <──────────────  │ (Chrome headless) │
+└──────────────┘  JSON response   └───────────────────┘
+```
+
+### Quick start
+
+```bash
+agent_ferrum start https://example.com   # Launch browser daemon + navigate
+agent_ferrum snapshot                    # Get accessibility tree + markdown
+agent_ferrum click @e1                   # Click an element by ref
+agent_ferrum screenshot /tmp/page.png    # Take a screenshot
+agent_ferrum stop                        # Stop daemon and browser
+```
+
+### All commands
+
+```
+Session:
+  start [URL] [options]   Start the browser daemon
+    --headed              Visible browser (default: headless)
+    --stealth PROFILE     off / minimal / moderate / maximum
+    --user-agent UA       Custom user agent
+    --viewport WxH        Viewport size (default: 1920x1080)
+    --timeout N           Timeout in seconds (default: 30)
+    --browser-path PATH   Path to Chrome binary
+  stop                    Stop the browser daemon
+  status                  Show browser status
+
+Navigation:
+  navigate URL            Navigate to URL (alias: go)
+  back / forward / refresh
+
+Content:
+  snapshot                Full snapshot (alias: snap)
+  tree                    Accessibility tree only
+  markdown                Page markdown only (alias: md)
+  url                     Current URL
+  title                   Page title
+
+Actions:
+  click TARGET            Click element (ref @e1 or CSS selector)
+  fill TARGET VALUE       Fill an input field
+  select TARGET VALUE     Select a dropdown option
+  hover TARGET            Hover over element
+  type TEXT               Type text via keyboard
+
+Utilities:
+  screenshot [PATH]       Take a screenshot
+  eval JS                 Evaluate JavaScript
+  stealth PROFILE         Change stealth profile
+  wait SELECTOR [TIMEOUT] Wait for element (CSS or XPath)
+```
+
+### Example: AI agent loop
+
+```bash
+agent_ferrum start https://shop.example.com
+# AI reads the page
+SNAP=$(agent_ferrum snapshot)
+# AI decides to search
+agent_ferrum fill @e3 "wireless headphones"
+agent_ferrum click @e4
+agent_ferrum wait ".results"
+# AI reads results
+agent_ferrum snapshot
+# Done
+agent_ferrum stop
 ```
 
 ## Development

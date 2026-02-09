@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "agent_ferrum"
+require_relative "../lib/agent_ferrum/cli"
+
+AgentFerrum::CLI.run(ARGV)

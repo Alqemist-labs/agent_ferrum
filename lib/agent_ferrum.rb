@@ -4,6 +4,8 @@ require "zeitwerk"
 
 loader = Zeitwerk::Loader.for_gem
 loader.ignore("#{__dir__}/agent_ferrum/errors.rb")
+loader.ignore("#{__dir__}/agent_ferrum/cli.rb")
+loader.ignore("#{__dir__}/agent_ferrum/cli")
 loader.setup
 
 require_relative "agent_ferrum/errors"

@@ -9,6 +9,7 @@ class TestNode < Minitest::Test
   end
 
   def test_click_delegates_to_ferrum_node
+    @mock_ferrum_node.expect(:evaluate, nil, [String])
     @mock_ferrum_node.expect(:click, nil)
     node = AgentFerrum::Node.new(@mock_ferrum_node)
     node.click
@@ -47,6 +48,7 @@ class TestNode < Minitest::Test
   def test_retry_on_node_moving_error
     call_count = 0
     fake_node = Object.new
+    fake_node.define_singleton_method(:evaluate) { |_| nil }
     fake_node.define_singleton_method(:click) do
       call_count += 1
       raise Ferrum::NodeMovingError.new(nil, [0, 0], [1, 1]) if call_count < 3
@@ -58,6 +60,7 @@ class TestNode < Minitest::Test
 
   def test_raises_after_max_retries
     fake_node = Object.new
+    fake_node.define_singleton_method(:evaluate) { |_| nil }
     fake_node.define_singleton_method(:click) do
       raise Ferrum::NodeMovingError.new(nil, [0, 0], [1, 1])
     end

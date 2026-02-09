@@ -14,7 +14,9 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.4.0"
 
-  spec.files = Dir["lib/**/*", "LICENSE.txt", "README.md", "CHANGELOG.md"]
+  spec.bindir = "bin"
+  spec.executables = ["agent_ferrum"]
+  spec.files = Dir["lib/**/*", "bin/*", "LICENSE.txt", "README.md", "CHANGELOG.md"]
   spec.require_paths = ["lib"]
 
   spec.add_dependency "ferrum", "~> 0.17"

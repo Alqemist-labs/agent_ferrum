@@ -9,7 +9,10 @@ module AgentFerrum
     end
 
     def click
-      with_retry { @node.click }
+      with_retry do
+        @node.evaluate("this.scrollIntoView({block: 'center', inline: 'center'})")
+        @node.click
+      end
     end
 
     def fill(value)
@@ -24,7 +27,11 @@ module AgentFerrum
     end
 
     def hover
-      with_retry { @node.hover }
+      with_retry do
+        @node.evaluate("this.scrollIntoView({block: 'center', inline: 'center'})")
+        x, y = @node.find_position
+        @node.page.mouse.move(x: x, y: y)
+      end
     end
 
     def focus
