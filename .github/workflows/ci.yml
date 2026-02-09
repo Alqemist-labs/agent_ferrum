@@ -21,9 +21,23 @@ jobs:
 
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Set up display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
 
       - name: Run unit tests
+        env:
+          CI: true
+          DISPLAY: ":99"
         run: bundle exec rake test
 
       - name: Run integration tests
+        env:
+          CI: true
+          DISPLAY: ":99"
         run: bundle exec rake integration
