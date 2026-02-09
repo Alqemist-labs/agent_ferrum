@@ -63,9 +63,9 @@ class TestBrowserNavigation < Minitest::Test
   end
 
   def test_quit_closes_browser
-    @browser.quit
-    assert_raises { @browser.evaluate("1") }
-    @browser = nil
+    temp = AgentFerrum::Browser.new
+    temp.quit
+    assert_raises { temp.evaluate("1") }
   end
 end
 
