@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Form Test Page</title>
+</head>
+<body>
+  <h1>Form Test</h1>
+  <form action="/submit" method="post">
+    <label for="email">Email</label>
+    <input type="text" id="email" name="email" placeholder="Enter email">
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password">
+
+    <label for="country">Country</label>
+    <select id="country" name="country">
+      <option value="us">United States</option>
+      <option value="uk">United Kingdom</option>
+      <option value="fr">France</option>
+    </select>
+
+    <label for="terms">
+      <input type="checkbox" id="terms" name="terms"> Accept terms
+    </label>
+
+    <fieldset>
+      <legend>Gender</legend>
+      <label for="male">
+        <input type="radio" id="male" name="gender" value="male"> Male
+      </label>
+      <label for="female">
+        <input type="radio" id="female" name="gender" value="female"> Female
+      </label>
+    </fieldset>
+
+    <button type="submit">Submit</button>
+    <button type="reset">Reset</button>
+  </form>
+</body>
+</html>

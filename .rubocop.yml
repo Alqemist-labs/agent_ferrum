@@ -1,0 +1,61 @@
+require: []
+
+AllCops:
+  TargetRubyVersion: 3.4
+  NewCops: enable
+  SuggestExtensions: false
+
+# Garder les guillemets doubles partout (cohérence)
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+# Permettre l'alignement en tableau dans les hash
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+# Permettre les espaces supplémentaires pour l'alignement
+Layout/ExtraSpacing:
+  AllowForAlignment: true
+  AllowBeforeTrailingComments: true
+
+# Permettre l'alignement en tableau dans les arguments
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+# Longueur de ligne raisonnable
+Layout/LineLength:
+  Max: 120
+
+# Pas de doc obligatoire sur les classes/modules
+Style/Documentation:
+  Enabled: false
+
+# Permettre les blocs plus longs
+Metrics/BlockLength:
+  Enabled: false
+
+# Longueur de méthode un peu plus permissive
+Metrics/MethodLength:
+  Max: 40
+
+# Limite de longueur de classe
+Metrics/ClassLength:
+  Max: 120
+
+# Complexité un peu plus permissive
+Metrics/AbcSize:
+  Max: 40
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/PerceivedComplexity:
+  Max: 15
+
+# Frozen string literal pas obligatoire
+Style/FrozenStringLiteralComment:
+  Enabled: false

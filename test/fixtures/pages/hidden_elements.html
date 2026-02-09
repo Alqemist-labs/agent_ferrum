@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Hidden Elements Test</title>
+  <style>
+    .styled-class { color: blue; }
+  </style>
+</head>
+<body>
+  <p>Visible paragraph</p>
+  <div style="display:none">Hidden by display</div>
+  <div style="visibility:hidden">Hidden by visibility</div>
+  <div style="opacity:0">Hidden by opacity</div>
+  <div style="width:0;height:0;overflow:hidden">Hidden by size</div>
+  <div aria-hidden="true">Hidden by aria</div>
+  <div hidden>Hidden by attribute</div>
+  <button>Visible Button</button>
+  <script>
+    var x = 1 + 2;
+  </script>
+</body>
+</html>
