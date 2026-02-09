@@ -38,7 +38,7 @@ module AgentFerrum
       opts[:process_timeout] = @process_timeout if @process_timeout
       opts[:browser_path] = @browser_path if @browser_path
       opts[:browser_options]["lang"] = @locale if @locale
-      @chrome_args.each { |arg| opts[:browser_options][arg] = nil }
+      @chrome_args.each { |arg| opts[:browser_options][arg.delete_prefix("--")] = nil }
       opts
     end
   end

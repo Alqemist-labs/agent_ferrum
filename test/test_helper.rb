@@ -13,7 +13,7 @@ module SharedBrowser
         c.headless = true
         if ENV["CI"]
           c.process_timeout = 30
-          c.chrome_args = %w[--no-sandbox --disable-gpu --disable-dev-shm-usage]
+          c.chrome_args = %w[no-sandbox disable-gpu disable-dev-shm-usage]
         end
       end
       AgentFerrum::Browser.new
@@ -35,7 +35,7 @@ module BrowserTestHelper
       c.headless = true
       if ENV["CI"]
         c.process_timeout = 30
-        c.chrome_args = %w[--no-sandbox --disable-gpu --disable-dev-shm-usage]
+        c.chrome_args = %w[no-sandbox disable-gpu disable-dev-shm-usage]
       end
     end
 
