@@ -9,7 +9,7 @@ require "socket"
 class TestCLI < Minitest::Test
   def test_version_output
     out, = capture_io { AgentFerrum::CLI.run(["version"]) }
-    assert_match(/agent_ferrum 0\.2\.0/, out)
+    assert_match(/agent_ferrum #{Regexp.escape(AgentFerrum::VERSION)}/, out)
   end
 
   def test_help_output

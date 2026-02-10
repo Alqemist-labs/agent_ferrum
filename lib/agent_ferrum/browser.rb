@@ -96,7 +96,7 @@ module AgentFerrum
 
     def wait_for_navigation(timeout: nil)
       timeout ||= @config.timeout
-      @ferrum.page.wait_for_idle(timeout: timeout)
+      @ferrum.network.wait_for_idle(timeout: timeout)
     end
 
     # --- Downloads ---
